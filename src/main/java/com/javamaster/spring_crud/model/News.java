@@ -1,35 +1,86 @@
 package com.javamaster.spring_crud.model;
 
-import lombok.Data;
+import com.javamaster.spring_crud.enums.Source;
+import lombok.*;
 
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-@Data
 @Entity
+@Getter
+@EqualsAndHashCode
+@ToString
 @Table(name = "itsm_news")
 public class News {
 
     @Id
-    @GeneratedValue(strategy  = GenerationType.IDENTITY)
-    private Long ind;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "news_generator")
+    @SequenceGenerator(name = "news_generator", sequenceName = "general_news_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
 
+    @Setter
+    @Column(name = "source")
+    private Source source;
+
+    @Setter
+    @Column(name = "author_login")
     private String authorLogin;
 
-    private Long listWorkGroupOid;
+    @Setter
+    @Column(name = "modifier_login")
+    private String modifierLogin;
 
-    @ElementCollection
-    @CollectionTable(name = "itsm_news_workGroups", joinColumns = @JoinColumn(name = "ind"))
-    @Column(name = "workGroup_oid")
-    private List<Long> itsm_workGroups;
+    @Setter
+    @Column(name = "author_name")
+    private String authorName;
 
-//    @ManyToMany
-//    @JoinTable( name = "itsm_workGroups",
-//                joinColumns = { @JoinColumn(name = "ind") },
-//                inverseJoinColumns = { @JoinColumn(name = "workGroup_id") }
-//    )
-//    private Set<News> workGroups = new HashSet<>();
+    @Setter
+    @Column(name = "description")
+    private String description;
+
+    @Setter
+    @Column(name = "information")
+    private String information;
+
+    @Setter
+    @Column(name = "recommendation")
+    private String recommendation;
+
+    @Setter
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "news_work_groups", joinColumns = @JoinColumn(name = "news_id"))
+    @Column(name = "workgroup_oid")
+    private List<Long> recipientWorkGroups = new ArrayList<>();
+
+    @Setter
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "news_id")
+    private List<Comment> comments = new ArrayList<>();
+
+    @Setter
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "setting_id")
+    private NewsSetting setting;
+
+    @Setter
+    @Column(name = "date_create")
+    private Date dateCreate;
+
+    @Setter
+    @Column(name = "date_modification")
+    private Date dateModification;
+
+    @Setter
+    @Column(name = "publication_date")
+    private Date publicationDate;
+
+    @Setter
+    @Column(name = "end_date")
+    private Date endingDate;
+
+    @Setter
+    @Column(name = "status")
+    private Boolean status;
 }
