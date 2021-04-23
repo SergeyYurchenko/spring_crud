@@ -1,40 +1,44 @@
 package com.javamaster.spring_crud.model;
 
 import com.javamaster.spring_crud.enums.Source;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 
-import javax.persistence.*;
-import java.util.*;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
-@EqualsAndHashCode
 @ToString
 @Table(name = "itsm_news")
-public class News {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "news_generator")
-    @SequenceGenerator(name = "news_generator", sequenceName = "general_news_seq", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
+public class News extends ParentSettings{
 
     @Setter
     @Column(name = "source")
     private Source source;
 
-    @Setter
-    @Column(name = "author_login")
-    private String authorLogin;
 
     @Setter
     @Column(name = "modifier_login")
     private String modifierLogin;
 
     @Setter
-    @Column(name = "author_name")
-    private String authorName;
+    @Column(name = "modifier_name")
+    private String modifierName;
+
 
     @Setter
     @Column(name = "description")
@@ -63,10 +67,6 @@ public class News {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "setting_id")
     private NewsSetting setting;
-
-    @Setter
-    @Column(name = "date_create")
-    private Date dateCreate;
 
     @Setter
     @Column(name = "date_modification")

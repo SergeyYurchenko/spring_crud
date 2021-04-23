@@ -1,20 +1,18 @@
 package com.javamaster.spring_crud.model;
 
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "news_setting")
-public class NewsSetting {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "news_setting_generator")
-    @SequenceGenerator(name = "news_setting_generator", sequenceName = "general_news_setting_seq", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
+public class NewsSetting extends ParentSettings{
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "setting_id")
@@ -38,7 +36,20 @@ public class NewsSetting {
     @Column(name = "roles")
     private List<String> roles = new ArrayList<>();
 
-
+    @Setter
     @Column(name = "status")
     private Boolean status;
+
+    @Setter
+    @Column(name = "date_modification")
+    private Date dateModification;
+
+    @Setter
+    @Column(name = "modifier_login")
+    private String modifierLogin;
+
+    @Setter
+    @Column(name = "modifier_name")
+    private String modifierName;
+
 }
